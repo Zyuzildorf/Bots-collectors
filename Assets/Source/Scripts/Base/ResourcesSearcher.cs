@@ -1,26 +1,27 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class ResourcesSearcher : MonoBehaviour
 {
     [SerializeField] private float _searchRadius;
 
-    public Transform SearchResources()
+    public bool TryGetResource(out Resource freeResource)
     {
-        Transform targetPosition = null;
-        
+       // freeResources = new List<Resource>();
+       freeResource = null;
+           
         Collider[] colliders = Physics.OverlapSphere(transform.position, _searchRadius);
 
         foreach (Collider collider in colliders)
         {
-            if (collider.TryGetComponent(out Resource resource))
+            if (collider.TryGetComponent(out Resource resource) && resource.IsPreferToDeliver == false)
             {
-                targetPosition = collider.transform;
-                return targetPosition;
+                freeResource = resource;
+                return true;
             }
         }
         
-        return targetPosition;
+        return false;
     }
 
     private void OnDrawGizmos()

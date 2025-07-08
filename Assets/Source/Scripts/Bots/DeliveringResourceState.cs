@@ -3,30 +3,44 @@
 public class DeliveringResourceState : MoveState
 {
     private Vector3 _targetPosition;
+    [SerializeField] private IdleState _idleState;
+
 
     private void OnTriggerEnter(Collider other)
     {
+        if (BotCollector._currentState.Equals(this) == false)
+            return;
+
         if (other.TryGetComponent(out Base botBase))
         {
-            DropResource();
+            Debug.Log("Collided base");
+            botBase.GetResource(DropResource());
+            Debug.Log("Dropped resource");
+
             BotCollector.CompleteTask();
-            BotCollector.SetState(new IdleState());
+            BotCollector.SetState(_idleState);
+            Debug.Log("Completed task, set idle state");
         }
     }
-    
+
     public override void UpdateState()
     {
-       Move(_targetPosition); 
+        Move(_targetPosition);
     }
 
     public override void Enter()
     {
-        _targetPosition = BotCollector.BasePosition.position;
+        _targetPosition = BotCollector.BasePosition;
     }
-    
-    private void DropResource()
+
+    public Resource DropResource()
     {
-        transform.GetChild(0).GetComponent<Resource>().SetKinematicBehavior(false);
-        transform.DetachChildren();
+        Resource resource = transform.GetComponentInChildren<Resource>();
+        resource.SetKinematicBehavior(false);
+        resource.transform.SetParent(null);
+
+        Exit();
+
+        return resource;
     }
 }

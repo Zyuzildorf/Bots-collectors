@@ -72,7 +72,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Base
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3451118302482216456, guid: e85b83bb6c25b447aaefd471b89484c0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -85,6 +86,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e85b83bb6c25b447aaefd471b89484c0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7669004220684743535}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e85b83bb6c25b447aaefd471b89484c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2520173030957794619}
   m_SourcePrefab: {fileID: 100100000, guid: e85b83bb6c25b447aaefd471b89484c0, type: 3}
 --- !u!1 &8232186964582233553 stripped
 GameObject:
@@ -110,7 +114,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4, y: 2, z: 4}
+  m_Size: {x: 3, y: 3, z: 3}
   m_Center: {x: 0, y: 1, z: -0.000000044703484}
 --- !u!114 &6344746528479957924
 MonoBehaviour:
@@ -125,8 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _colliderSize: {x: 4, y: 1, z: 4}
-  _searchRadius: 15
-  _startBotsAmount: 3
+  _startBotsAmount: 1
 --- !u!114 &7669004220684743535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,3 +144,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 1348642827271324191, guid: 2b88e4fda02e1ee4fb4c0889d83cdbf9, type: 3}
   _radius: 2
+--- !u!114 &2520173030957794619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8232186964582233553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a10f8c87ce46758416feecb78d007f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _searchRadius: 50

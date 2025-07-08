@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider), typeof(BotsSpawner), typeof(ResourcesSearcher))]
+[RequireComponent(typeof(BotsSpawner), typeof(ResourcesSearcher))]
 public class Base : MonoBehaviour
 {
-    [SerializeField] private Vector3 _colliderSize;
     [SerializeField] private int _startBotsAmount;
 
     private List<BotCollector> _bots;
-    private BoxCollider _collider;
     private BotsSpawner _spawner;
     private ResourcesSearcher _searcher;
     private float _gearsAmount;
@@ -16,65 +15,63 @@ public class Base : MonoBehaviour
 
     private void Awake()
     {
-        _collider = GetComponent<BoxCollider>();
         _spawner = GetComponent<BotsSpawner>();
         _searcher = GetComponent<ResourcesSearcher>();
     }
 
     private void Start()
     {
-        _collider.size = _colliderSize;
-        
         _bots = _spawner.SpawnBots(_startBotsAmount);
     }
 
     private void Update()
     {
-        // if (CheckForFreeBot(out BotCollector bot))
-        // {
-        //     Transform foundResource = _searcher.SearchResources();
-        //
-        //     if (foundResource != null)
-        //     {
-        //         bot.GetTask(foundResource);
-        //     }
-        // }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out Resource resource))
+        if (CheckForFreeBot(out BotCollector collector))
         {
-            ProcessResource(resource);
+            if (_searcher.TryGetResource(out Resource resource))
+            {
+                resource.GetPreferToDeliver();
+
+                collector.GetTask(resource.transform.position);
+                Debug.Log(collector + " " + resource + " " + resource.transform + "- get task");
+            }
         }
     }
 
-    private bool CheckForFreeBot(out BotCollector collector)
+    public void GetResource(Resource resource)
     {
+        ProcessResource(resource);
+    }
+
+    private bool CheckForFreeBot(out BotCollector botCollector)
+    {
+        botCollector = null;
+
         foreach (BotCollector bot in _bots)
         {
             if (bot.IsTaskRecieved == false)
             {
-                collector = bot;
+                botCollector = bot;
                 return true;
             }
         }
-        
-        collector = null;
+
         return false;
     }
-    
+
     private void ProcessResource(Resource resource)
     {
         if (resource is Gear)
         {
             _gearsAmount++;
-            Debug.Log(_gearsAmount + " gears");
+            resource.gameObject.SetActive(false);
+            Debug.Log(_gearsAmount + " gears collected");
         }
         else if (resource is Barrel)
         {
             _barrelsAmount++;
-            Debug.Log(_barrelsAmount + " barrels");
+            resource.gameObject.SetActive(false);
+            Debug.Log(_barrelsAmount + " barrels collected");
         }
     }
 }

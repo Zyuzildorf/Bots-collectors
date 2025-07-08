@@ -2,16 +2,19 @@ using UnityEngine;
 
 public class BotCollector : MonoBehaviour
 {
-    [SerializeField] private float _speed;
+    [SerializeField] private float _moveSpeed;
+    [SerializeField] private float _rotateSpeed;
     [SerializeField] private float _pickUpZOffset;
     [SerializeField] private float _pickUpYOffset;
     [SerializeField] private float _pickUpXOffset;
-    
-    private CollectorState _currentState;
-    
-    public Transform BasePosition { get; private set; }
-    public Transform TargetPosition { get; private set; }
-    public float Speed { get; private set; }
+
+    public CollectorState _currentState;
+    [SerializeField] private IdleState _idleState;
+
+    public Vector3 BasePosition { get; private set; }
+    public Vector3 TargetPosition { get; private set; }
+    public float MoveSpeed { get; private set; }
+    public float RotateSpeed { get; private set; }
     public float PickUpZOffset { get; private set; }
     public float PickUpYOffset { get; private set; }
     public float PickUpXOffset { get; private set; }
@@ -19,12 +22,15 @@ public class BotCollector : MonoBehaviour
 
     private void Awake()
     {
-        Speed = _speed;
+        BasePosition = transform.position;
+        MoveSpeed = _moveSpeed;
+        RotateSpeed = _rotateSpeed;
         PickUpZOffset = _pickUpZOffset;
         PickUpYOffset = _pickUpYOffset;
         PickUpXOffset = _pickUpXOffset;
-        
-        SetState(new IdleState());
+
+        CompleteTask();
+        SetState(_idleState);
     }
 
     private void Update()
@@ -38,7 +44,7 @@ public class BotCollector : MonoBehaviour
         {
             return;
         }
-        
+
         _currentState?.Exit();
         _currentState = state;
         _currentState?.Enter();
@@ -49,9 +55,9 @@ public class BotCollector : MonoBehaviour
         IsTaskRecieved = false;
     }
 
-    public void GetTask(Transform target)
+    public void GetTask(Vector3 target)
     {
-        TargetPosition = target;
         IsTaskRecieved = true;
+        TargetPosition = target;
     }
 }
