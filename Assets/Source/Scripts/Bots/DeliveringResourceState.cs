@@ -1,46 +1,47 @@
-﻿using UnityEngine;
+﻿using Source.Scripts.Interfaces;
+using Source.Scripts.Resources;
+using UnityEngine;
 
-public class DeliveringResourceState : MoveState
+namespace Source.Scripts.Bots
 {
-    private Vector3 _targetPosition;
-    [SerializeField] private IdleState _idleState;
-
-
-    private void OnTriggerEnter(Collider other)
+    public class DeliveringResourceState : MovementState, IUpdatable, IEnterable
     {
-        if (BotCollector._currentState.Equals(this) == false)
-            return;
+        [SerializeField] private IdleState _idleState;
+    
+        private Vector3 _targetPosition;
 
-        if (other.TryGetComponent(out Base botBase))
+        private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("Collided base");
-            botBase.GetResource(DropResource());
-            Debug.Log("Dropped resource");
+            if (BotCollector.CurrentState.Equals(this) == false)
+                return;
 
-            BotCollector.CompleteTask();
-            BotCollector.SetState(_idleState);
-            Debug.Log("Completed task, set idle state");
+            if (other.TryGetComponent(out Base.Base botBase))
+            {
+                botBase.GetResource(DropResource());
+
+                BotCollector.CompleteTask();
+                BotCollector.SetState(_idleState);
+            }
         }
-    }
 
-    public override void UpdateState()
-    {
-        Move(_targetPosition);
-    }
+        public void UpdateState()
+        {
+            Move(_targetPosition);
+            Rotate(_targetPosition);
+        }
 
-    public override void Enter()
-    {
-        _targetPosition = BotCollector.BasePosition;
-    }
+        public void Enter()
+        {
+            _targetPosition = BotCollector.BasePosition;
+        }
 
-    public Resource DropResource()
-    {
-        Resource resource = transform.GetComponentInChildren<Resource>();
-        resource.SetKinematicBehavior(false);
-        resource.transform.SetParent(null);
+        private Resource DropResource()
+        {
+            Resource resource = transform.GetComponentInChildren<Resource>();
+            resource.SetKinematicBehavior(false);
+            resource.transform.SetParent(null);
 
-        Exit();
-
-        return resource;
+            return resource;
+        }
     }
 }

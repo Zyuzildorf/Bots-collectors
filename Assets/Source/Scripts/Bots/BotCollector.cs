@@ -1,63 +1,58 @@
+using Source.Scripts.Interfaces;
 using UnityEngine;
 
-public class BotCollector : MonoBehaviour
+namespace Source.Scripts.Bots
 {
-    [SerializeField] private float _moveSpeed;
-    [SerializeField] private float _rotateSpeed;
-    [SerializeField] private float _pickUpZOffset;
-    [SerializeField] private float _pickUpYOffset;
-    [SerializeField] private float _pickUpXOffset;
-
-    public CollectorState _currentState;
-    [SerializeField] private IdleState _idleState;
-
-    public Vector3 BasePosition { get; private set; }
-    public Vector3 TargetPosition { get; private set; }
-    public float MoveSpeed { get; private set; }
-    public float RotateSpeed { get; private set; }
-    public float PickUpZOffset { get; private set; }
-    public float PickUpYOffset { get; private set; }
-    public float PickUpXOffset { get; private set; }
-    public bool IsTaskRecieved { get; private set; }
-
-    private void Awake()
+    public class BotCollector : MonoBehaviour
     {
-        BasePosition = transform.position;
-        MoveSpeed = _moveSpeed;
-        RotateSpeed = _rotateSpeed;
-        PickUpZOffset = _pickUpZOffset;
-        PickUpYOffset = _pickUpYOffset;
-        PickUpXOffset = _pickUpXOffset;
+        [SerializeField] private IdleState _idleState;
 
-        CompleteTask();
-        SetState(_idleState);
-    }
+        public Vector3 BasePosition { get; private set; }
+        public Vector3 TargetPosition { get; private set; }
+        public CollectorState CurrentState { get; private set; }
+        public bool IsTaskRecieved { get; private set; }
 
-    private void Update()
-    {
-        _currentState?.UpdateState();
-    }
-
-    public void SetState(CollectorState state)
-    {
-        if (_currentState == state)
+        private void Awake()
         {
-            return;
+            BasePosition = transform.position;
+
+            CompleteTask();
+            SetState(_idleState);
         }
 
-        _currentState?.Exit();
-        _currentState = state;
-        _currentState?.Enter();
-    }
+        private void Update()
+        {
+            if (CurrentState is IUpdatable updatable)
+            {
+                updatable.UpdateState();
+            }
+        }
 
-    public void CompleteTask()
-    {
-        IsTaskRecieved = false;
-    }
+        public void SetState(CollectorState state)
+        {
+            if (CurrentState == state)
+            {
+                return;
+            }
 
-    public void GetTask(Vector3 target)
-    {
-        IsTaskRecieved = true;
-        TargetPosition = target;
+            CurrentState = state;
+
+            if (CurrentState is IEnterable enterable)
+            {
+                enterable.Enter();
+            }
+        }
+
+        public void CompleteTask()
+        {
+            IsTaskRecieved = false;
+            TargetPosition = transform.position;
+        }
+
+        public void GetTask(Vector3 target)
+        {
+            IsTaskRecieved = true;
+            TargetPosition = target;
+        }
     }
 }

@@ -1,3 +1,6 @@
-﻿public class Barrel : Resource
+﻿namespace Source.Scripts.Resources
 {
+    public class Barrel : Resource
+    {
+    }
 }

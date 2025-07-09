@@ -1,3 +1,6 @@
-﻿public class Gear : Resource
+﻿namespace Source.Scripts.Resources
 {
+    public class Gear : Resource
+    {
+    }
 }

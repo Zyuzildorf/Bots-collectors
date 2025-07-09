@@ -1,20 +1,24 @@
 ﻿using System.Collections.Generic;
+using Source.Scripts.Bots;
 using UnityEngine;
 
-public class BotsSpawner : Spawner
+namespace Source.Scripts.Spawners
 {
-    private List<BotCollector> _bots = new List<BotCollector>();
-    
-    public List<BotCollector> SpawnBots(int amount)
+    public class BotsSpawner : Spawner
     {
-        for (int i = 0; i < amount; i++)
+        public List<BotCollector> SpawnBots(int amount)
         {
-            SpawnObject(out GameObject obj);
-            obj.TryGetComponent(out BotCollector bot);
-            
-            _bots.Add(obj.GetComponent<BotCollector>());
-        }
+            List<BotCollector> bots = new List<BotCollector>();
         
-        return _bots;
+            for (int i = 0; i < amount; i++)
+            {
+                SpawnObject(out GameObject obj);
+                obj.TryGetComponent(out BotCollector bot);
+            
+                bots.Add(bot);
+            }
+        
+            return bots;
+        }
     }
 }

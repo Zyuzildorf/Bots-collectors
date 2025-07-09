@@ -1,32 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using Source.Scripts.Resources;
 using UnityEngine;
 
-public class ResourcesSearcher : MonoBehaviour
+namespace Source.Scripts.Base
 {
-    [SerializeField] private float _searchRadius;
-
-    public bool TryGetResource(out Resource freeResource)
+    public class ResourcesSearcher : MonoBehaviour
     {
-       // freeResources = new List<Resource>();
-       freeResource = null;
-           
-        Collider[] colliders = Physics.OverlapSphere(transform.position, _searchRadius);
+        [SerializeField] private float _searchRadius;
 
-        foreach (Collider collider in colliders)
+        public bool TryGetResource(out Resource freeResource)
         {
-            if (collider.TryGetComponent(out Resource resource) && resource.IsPreferToDeliver == false)
-            {
-                freeResource = resource;
-                return true;
-            }
-        }
-        
-        return false;
-    }
+            freeResource = null;
+           
+            Collider[] colliders = Physics.OverlapSphere(transform.position, _searchRadius);
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _searchRadius);
+            foreach (Collider collider in colliders)
+            {
+                if (collider.TryGetComponent(out Resource resource) && resource.IsPreferToDeliver == false)
+                {
+                    freeResource = resource;
+                    return true;
+                }
+            }
+        
+            return false;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, _searchRadius);
+        }
     }
 }

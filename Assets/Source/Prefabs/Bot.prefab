@@ -26,13 +26,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2307118592152390634}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: -0.0349, z: -0.587}
+  m_LocalRotation: {x: 0.12278779, y: -0.6963643, z: 0.12278779, w: 0.6963643}
+  m_LocalPosition: {x: 0.665, y: -0.15, z: 0}
   m_LocalScale: {x: 0.21, y: 0.96, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5798711156108475056}
-  m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 20, y: -90, z: 0}
 --- !u!33 &3222630024776955016
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 4146103037511316188}
   - component: {fileID: 3771088840208546408}
   - component: {fileID: -4645008169224775508}
+  - component: {fileID: 7604109410852486616}
   m_Layer: 0
   m_Name: Bot
   m_TagString: Untagged
@@ -154,12 +155,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a10ea37ef45f1fe4eb61de83c5545bfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 8
-  _rotateSpeed: 5
-  _pickUpZOffset: 0
-  _pickUpYOffset: 0.5
-  _pickUpXOffset: -1
-  _currentState: {fileID: 0}
   _idleState: {fileID: 3771088840208546408}
 --- !u!114 &1634161647788632008
 MonoBehaviour:
@@ -173,6 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2de2703703942b8a8c08de7e1edfd48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveSpeed: 5
+  _rotateSpeed: 5
   _idleState: {fileID: 3771088840208546408}
 --- !u!114 &4146103037511316188
 MonoBehaviour:
@@ -186,8 +183,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf0fdf5a008a4c7898be1d191e2316a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveSpeed: 10
+  _rotateSpeed: 5
   _deliveringResourceState: {fileID: 1634161647788632008}
   _closeDistance: 0.1
+  _pickUpZOffset: -1
+  _pickUpYOffset: 1
+  _pickUpXOffset: 0
 --- !u!114 &3771088840208546408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,6 +230,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!95 &7604109410852486616
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3500593055519631615}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2211e0baab45e3742a657fde98e05b3e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4753966411301966976
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +278,7 @@ Transform:
   m_GameObject: {fileID: 4753966411301966976}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.532, z: 0}
+  m_LocalPosition: {x: 0, y: 0.777, z: 0}
   m_LocalScale: {x: 1, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -339,13 +362,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8139947628522438495}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.258819, y: 0, z: 0, w: 0.9659259}
-  m_LocalPosition: {x: -0, y: -0.033, z: 0.587}
+  m_LocalRotation: {x: -0.122787856, y: -0.6963643, z: -0.122787856, w: 0.6963643}
+  m_LocalPosition: {x: -0.671, y: -0.15, z: 0}
   m_LocalScale: {x: 0.21, y: 0.96, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5798711156108475056}
-  m_LocalEulerAnglesHint: {x: -30, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -20, y: -90, z: 0}
 --- !u!33 &2406832499097304083
 MeshFilter:
   m_ObjectHideFlags: 0

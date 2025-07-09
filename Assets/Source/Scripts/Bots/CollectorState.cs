@@ -1,18 +1,14 @@
 ﻿using UnityEngine;
 
-public abstract class CollectorState : MonoBehaviour
+namespace Source.Scripts.Bots
 {
-    protected BotCollector BotCollector;
-
-    private void Awake()
+    public abstract class CollectorState : MonoBehaviour
     {
-        BotCollector = GetComponent<BotCollector>();
+        protected BotCollector BotCollector;
+
+        private void Awake()
+        {
+            BotCollector = GetComponent<BotCollector>();
+        }
     }
-
-    public virtual void UpdateState(){}
-    
-    public virtual void Enter(){}
-
-    public virtual void Exit(){}
-    
 }

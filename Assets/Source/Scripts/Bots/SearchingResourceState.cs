@@ -1,67 +1,71 @@
-﻿using UnityEngine;
+﻿using Source.Scripts.Interfaces;
+using Source.Scripts.Resources;
+using UnityEngine;
 
-public class SearchingResourceState : MoveState
+namespace Source.Scripts.Bots
 {
-    [SerializeField]  private DeliveringResourceState _deliveringResourceState;
-    [SerializeField] private float _closeDistance = 0.1f;
+    public class SearchingResourceState : MovementState, IUpdatable, IEnterable
+    {
+        [SerializeField]  private DeliveringResourceState _deliveringResourceState;
+        [SerializeField] private float _closeDistance = 0.1f;
+        [SerializeField] private float _pickUpZOffset;
+        [SerializeField] private float _pickUpYOffset;
+        [SerializeField] private float _pickUpXOffset;
     
-    private Vector3 _targetPosition;
-    private bool _isTakenResource;
+        private Vector3 _targetPosition;
+        private bool _isResourceTaken;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (BotCollector._currentState.Equals(this) == false || other.TryGetComponent(out BotCollector bot))
-            return;
-
-        if (other.TryGetComponent(out Resource resource) && resource.IsPickedUp == false
-                                                         && resource.IsPreferToDeliver
-                                                         && IsTargetResource(resource)) 
+        private void OnTriggerEnter(Collider other)
         {
-            Debug.Log(resource + "picked up");
-            PickUpResource(resource);
+            if (BotCollector.CurrentState.Equals(this) == false || other.TryGetComponent(out BotCollector bot))
+                return;
+
+            if (other.TryGetComponent(out Resource resource) && IsTargetResource(resource)) 
+            {
+                PickUpResource(resource);
+            }
         }
-    }
     
-    public override void UpdateState()
-    {
-        Move(_targetPosition);
-
-        if (_isTakenResource)
+        public void UpdateState()
         {
-            BotCollector.SetState(_deliveringResourceState);
+            Move(_targetPosition);
+            Rotate(_targetPosition);
+
+            if (_isResourceTaken)
+            {
+                BotCollector.SetState(_deliveringResourceState);
+            }
         }
-    }
     
-    public override void Enter()
-    {
-        _isTakenResource = false;
-        _targetPosition = BotCollector.TargetPosition;
-    }
-
-    private void PickUpResource(Resource resource)
-    {
-        bool isKinematic = true;
-        
-        resource.GetPickedUp();
-        
-        resource.SetKinematicBehavior(isKinematic);
-        
-        resource.transform.SetParent(transform);
-        resource.transform.localPosition = new Vector3(BotCollector.PickUpXOffset, BotCollector.PickUpYOffset,
-            BotCollector.PickUpZOffset);
-        
-        _isTakenResource = true;
-    }
-
-    private bool IsTargetResource(Resource resource)
-    {
-        Vector2 targetPosition = new Vector2(_targetPosition.x, _targetPosition.z);
-        Vector2 resourcePosition = new Vector2(resource.transform.position.x, resource.transform.position.z);
-        
-        if ((targetPosition - resourcePosition).sqrMagnitude < _closeDistance * _closeDistance)
+        public void Enter()
         {
-            return true;
+            _isResourceTaken = false;
+            _targetPosition = BotCollector.TargetPosition;
         }
-        return false;
+
+        private void PickUpResource(Resource resource)
+        {
+            bool isKinematic = true;
+        
+            resource.SetKinematicBehavior(isKinematic);
+        
+            resource.transform.SetParent(transform);
+            resource.transform.localPosition = new Vector3(_pickUpXOffset, _pickUpYOffset,
+                _pickUpZOffset);
+        
+            _isResourceTaken = true;
+        }
+
+        private bool IsTargetResource(Resource resource)
+        {
+            Vector2 targetPosition = new Vector2(_targetPosition.x, _targetPosition.z);
+            Vector2 resourcePosition = new Vector2(resource.transform.position.x, resource.transform.position.z);
+        
+            if ((targetPosition - resourcePosition).sqrMagnitude < _closeDistance * _closeDistance)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

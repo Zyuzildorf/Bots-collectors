@@ -1,14 +1,18 @@
-﻿using UnityEngine;
+﻿using Source.Scripts.Interfaces;
+using UnityEngine;
 
-public class IdleState : CollectorState
+namespace Source.Scripts.Bots
 {
-    [SerializeField] private SearchingResourceState _searchingResourceState;
-
-    public override void UpdateState()
+    public class IdleState : CollectorState, IUpdatable
     {
-        if (BotCollector.IsTaskRecieved)
+        [SerializeField] private SearchingResourceState _searchingResourceState;
+
+        public void UpdateState()
         {
-            BotCollector.SetState(_searchingResourceState);
+            if (BotCollector.IsTaskRecieved)
+            {
+                BotCollector.SetState(_searchingResourceState);
+            }
         }
     }
 }
