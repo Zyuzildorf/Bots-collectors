@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 2000958799351553135, guid: d4c763dd68d2fa84394c93551f64dc48, type: 3}
   _radius: 10
-  _amount: 50
+  _amount: 10
   _delay: 1
 --- !u!1 &705507993
 GameObject:
@@ -554,7 +554,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 8899084620231157328, guid: 0b6887609b695b545b4c8461e88b8bb2, type: 3}
   _radius: 10
-  _amount: 50
+  _amount: 10
   _delay: 1
 --- !u!1 &1967147839 stripped
 GameObject:
