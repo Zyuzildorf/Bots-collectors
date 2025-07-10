@@ -10,7 +10,7 @@ namespace Source.Scripts.Bots
         public Vector3 BasePosition { get; private set; }
         public Vector3 TargetPosition { get; private set; }
         public CollectorState CurrentState { get; private set; }
-        public bool IsTaskRecieved { get; private set; }
+        public bool IsTaskReceived { get; private set; }
 
         private void Awake()
         {
@@ -45,13 +45,13 @@ namespace Source.Scripts.Bots
 
         public void CompleteTask()
         {
-            IsTaskRecieved = false;
+            IsTaskReceived = false;
             TargetPosition = transform.position;
         }
 
         public void GetTask(Vector3 target)
         {
-            IsTaskRecieved = true;
+            IsTaskReceived = true;
             TargetPosition = target;
         }
     }

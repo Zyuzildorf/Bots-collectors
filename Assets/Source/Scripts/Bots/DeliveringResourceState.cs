@@ -1,5 +1,5 @@
 ﻿using Source.Scripts.Interfaces;
-using Source.Scripts.Resources;
+using Source.Scripts.Other;
 using UnityEngine;
 
 namespace Source.Scripts.Bots
@@ -17,7 +17,7 @@ namespace Source.Scripts.Bots
 
             if (other.TryGetComponent(out Base.Base botBase))
             {
-                botBase.GetResource(DropResource());
+                botBase.SetResource(DropResource());
 
                 BotCollector.CompleteTask();
                 BotCollector.SetState(_idleState);

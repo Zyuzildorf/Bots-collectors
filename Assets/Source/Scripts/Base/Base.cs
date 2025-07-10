@@ -1,7 +1,7 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Source.Scripts.Bots;
-using Source.Scripts.Resources;
+using Source.Scripts.Other;
 using Source.Scripts.Spawners;
 using UnityEngine;
 
@@ -11,73 +11,79 @@ namespace Source.Scripts.Base
     public class Base : MonoBehaviour
     {
         [SerializeField] private int _startBotsAmount;
+        [SerializeField] private float _searchingBotsDelay;
+        [SerializeField] private float _searchingResourcesDelay;
 
         private List<BotCollector> _bots;
         private BotsSpawner _spawner;
         private ResourcesSearcher _searcher;
-        private Dictionary<Type,int> _resources = new Dictionary<Type,int>();
+        private List<Resource> _resources;
+        private WaitForSeconds _waitForBotsSearch;
+        private WaitForSeconds _waitForResourcesSearch;
 
         private void Awake()
         {
             _spawner = GetComponent<BotsSpawner>();
             _searcher = GetComponent<ResourcesSearcher>();
+            _waitForBotsSearch = new WaitForSeconds(_searchingBotsDelay);
+            _waitForResourcesSearch = new WaitForSeconds(_searchingResourcesDelay);
+            _resources = new List<Resource>();
         }
 
         private void Start()
         {
             _bots = _spawner.SpawnBots(_startBotsAmount);
+
+            StartCoroutine(CheckForFreeBots());
+            StartCoroutine(CheckForFreeResourcesAvailable());
         }
 
-        private void Update()
+        private void OnDisable()
         {
-            if (CheckForFreeBot(out BotCollector collector))
+            StopAllCoroutines();
+        }
+
+        public void SetResource(Resource resource)
+        {
+            _resources.Add(resource);
+
+            resource.OnCollected();
+        }
+
+        private IEnumerator CheckForFreeBots()
+        {
+            while (enabled)
             {
-                if (_searcher.TryGetResource(out Resource resource))
+                foreach (BotCollector bot in _bots)
                 {
-                    resource.GetPreferToDeliver();
-
-                    collector.GetTask(resource.transform.position);
+                    if (bot.IsTaskReceived == false)
+                    {
+                        TryGiveTask(bot);
+                    }
                 }
+
+                yield return _waitForBotsSearch;
             }
         }
 
-        public void GetResource(Resource resource)
+        private IEnumerator CheckForFreeResourcesAvailable()
         {
-            ProcessResource(resource);
-        }
-
-        private bool CheckForFreeBot(out BotCollector botCollector)
-        {
-            botCollector = null;
-
-            foreach (BotCollector bot in _bots)
+            while (enabled)
             {
-                if (bot.IsTaskRecieved == false)
+                if (_searcher.FreeResourcesCount <= 0)
                 {
-                    botCollector = bot;
-                    return true;
+                    _searcher.TryFindResources();
                 }
+                
+                yield return _waitForResourcesSearch;
             }
-
-            return false;
         }
-
-        private void ProcessResource(Resource resource)
-        {
-            if (_resources.ContainsKey(resource.GetType()))
-            {
-                _resources[resource.GetType()]++;
-            }
-            else
-            {
-                _resources.Add(resource.GetType(), 1);
-            }
         
-            Destroy(resource.gameObject);
-
-            foreach (var collectedResource in _resources) // Debug resources amount
+        private void TryGiveTask(BotCollector bot)
+        {
+            if (_searcher.TryGetFreeResource(out Resource resource))
             {
-                Debug.Log(collectedResource.Key + " " + collectedResource.Value);
+                bot.GetTask(resource.transform.position);
             }
         }
     }

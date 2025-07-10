@@ -1,20 +1,17 @@
 ﻿using UnityEngine;
 
-namespace Source.Scripts.Resources
+namespace Source.Scripts.Other
 {
     [RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
-    public abstract class Resource : MonoBehaviour
+    public class Resource : MonoBehaviour
     {
         private Rigidbody _rigidbody;
         private BoxCollider _collider;
-    
-        public bool IsPreferToDeliver { get; private set; }
     
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
             _collider = GetComponent<BoxCollider>();
-            IsPreferToDeliver = false;
         }
 
         public void SetKinematicBehavior(bool isKinematic)
@@ -23,9 +20,9 @@ namespace Source.Scripts.Resources
             _collider.isTrigger = isKinematic;
         }
 
-        public void GetPreferToDeliver()
+        public void OnCollected()
         {
-            IsPreferToDeliver = true;
+            Destroy(gameObject);
         }
     }
 }

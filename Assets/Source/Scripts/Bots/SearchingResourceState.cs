@@ -1,5 +1,5 @@
 ﻿using Source.Scripts.Interfaces;
-using Source.Scripts.Resources;
+using Source.Scripts.Other;
 using UnityEngine;
 
 namespace Source.Scripts.Bots

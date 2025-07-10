@@ -9,7 +9,7 @@ namespace Source.Scripts.Bots
 
         public void UpdateState()
         {
-            if (BotCollector.IsTaskRecieved)
+            if (BotCollector.IsTaskReceived)
             {
                 BotCollector.SetState(_searchingResourceState);
             }
