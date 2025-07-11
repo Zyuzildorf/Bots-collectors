@@ -1,18 +1,39 @@
 using System.Collections;
+using Source.Scripts.Other;
 using UnityEngine;
 
 namespace Source.Scripts.Spawners
 {
-    public class ResourcesSpawner : Spawner
+    public class ResourcesSpawner : Spawner<Resource>
     {
         [SerializeField] private int _amount;
         [SerializeField] private float _delay;
     
+        private WaitForSeconds _waitForSeconds;
+        
         private void Start()
         {
+            _waitForSeconds = new WaitForSeconds(_delay);
+            
             StartSpawning();
         }
-    
+
+        private void OnDisable()
+        {
+            foreach (Resource resource in _activeObjects.ToArray())
+            {
+                resource.Collected -= OnCollected;
+            }
+        }
+
+        protected override Resource CreatePooledObject()
+        {
+            Resource resource = base.CreatePooledObject();
+            resource.Collected += OnCollected;
+            
+            return resource;
+        }
+
         private void StartSpawning()
         {
             StartCoroutine(SpawnObjectsOverTime());
@@ -24,10 +45,15 @@ namespace Source.Scripts.Spawners
         
             while (_amount > spawnedObjectsCount)
             {
-                SpawnObject();
+                ReleaseObject();
                 spawnedObjectsCount++;
-                yield return new WaitForSeconds(_delay);
+                yield return _waitForSeconds;
             }
+        }
+        
+        private void OnCollected(Resource resource)
+        {
+            GetObject(resource);
         }
     }
 }

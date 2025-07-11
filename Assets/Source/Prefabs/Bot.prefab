@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 3771088840208546408}
   - component: {fileID: -4645008169224775508}
   - component: {fileID: 7604109410852486616}
+  - component: {fileID: 7484515521416062429}
   m_Layer: 0
   m_Name: Bot
   m_TagString: Untagged
@@ -187,9 +188,7 @@ MonoBehaviour:
   _rotateSpeed: 5
   _deliveringResourceState: {fileID: 1634161647788632008}
   _closeDistance: 0.1
-  _pickUpZOffset: -1
-  _pickUpYOffset: 1
-  _pickUpXOffset: 0
+  _pickUpOffset: {x: 0, y: 1, z: -1}
 --- !u!114 &3771088840208546408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,6 +250,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7484515521416062429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3500593055519631615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68a0b7be687a27c4bad13c11df74855c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4753966411301966976
 GameObject:
   m_ObjectHideFlags: 0

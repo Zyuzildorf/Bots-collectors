@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Source.Scripts.Other
 {
@@ -8,6 +9,8 @@ namespace Source.Scripts.Other
         private Rigidbody _rigidbody;
         private BoxCollider _collider;
     
+        public event Action<Resource> Collected;
+        
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
@@ -20,9 +23,9 @@ namespace Source.Scripts.Other
             _collider.isTrigger = isKinematic;
         }
 
-        public void OnCollected()
+        public void CallEvent()
         {
-            Destroy(gameObject);
+            Collected.Invoke(this);
         }
     }
 }

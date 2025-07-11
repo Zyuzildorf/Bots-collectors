@@ -13,6 +13,7 @@ namespace Source.Scripts.Base
         [SerializeField] private int _startBotsAmount;
         [SerializeField] private float _searchingBotsDelay;
         [SerializeField] private float _searchingResourcesDelay;
+        [SerializeField] private ResourcesVault _vault;
 
         private List<BotCollector> _bots;
         private BotsSpawner _spawner;
@@ -45,9 +46,8 @@ namespace Source.Scripts.Base
 
         public void SetResource(Resource resource)
         {
+            _vault.RemoveBusyResource(resource);
             _resources.Add(resource);
-
-            resource.OnCollected();
         }
 
         private IEnumerator CheckForFreeBots()
@@ -70,18 +70,21 @@ namespace Source.Scripts.Base
         {
             while (enabled)
             {
-                if (_searcher.FreeResourcesCount <= 0)
+                if (_vault.FreeResourcesCount <= 0)
                 {
-                    _searcher.TryFindResources();
+                    if (_searcher.TryFindResources(out List<Resource> resources))
+                    {
+                        _vault.SetResources(resources);
+                    }
                 }
-                
+
                 yield return _waitForResourcesSearch;
             }
         }
-        
+
         private void TryGiveTask(BotCollector bot)
         {
-            if (_searcher.TryGetFreeResource(out Resource resource))
+            if (_vault.TryGetFreeResource(out Resource resource))
             {
                 bot.GetTask(resource.transform.position);
             }

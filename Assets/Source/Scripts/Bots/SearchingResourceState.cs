@@ -4,28 +4,23 @@ using UnityEngine;
 
 namespace Source.Scripts.Bots
 {
-    public class SearchingResourceState : MovementState, IUpdatable, IEnterable
+    public class SearchingResourceState : MovementState, IUpdatable, ITriggerable
     {
         [SerializeField]  private DeliveringResourceState _deliveringResourceState;
         [SerializeField] private float _closeDistance = 0.1f;
-        [SerializeField] private float _pickUpZOffset;
-        [SerializeField] private float _pickUpYOffset;
-        [SerializeField] private float _pickUpXOffset;
+        [SerializeField] private Vector3 _pickUpOffset;
     
         private Vector3 _targetPosition;
         private bool _isResourceTaken;
 
-        private void OnTriggerEnter(Collider other)
+        public void ProcessTriggerCollider(Collider other)
         {
-            if (BotCollector.CurrentState.Equals(this) == false || other.TryGetComponent(out BotCollector bot))
-                return;
-
             if (other.TryGetComponent(out Resource resource) && IsTargetResource(resource)) 
             {
                 PickUpResource(resource);
             }
         }
-    
+        
         public void UpdateState()
         {
             Move(_targetPosition);
@@ -37,8 +32,10 @@ namespace Source.Scripts.Bots
             }
         }
     
-        public void Enter()
+        public override void Enter()
         {
+            base.Enter();
+            
             _isResourceTaken = false;
             _targetPosition = BotCollector.TargetPosition;
         }
@@ -50,8 +47,8 @@ namespace Source.Scripts.Bots
             resource.SetKinematicBehavior(isKinematic);
         
             resource.transform.SetParent(transform);
-            resource.transform.localPosition = new Vector3(_pickUpXOffset, _pickUpYOffset,
-                _pickUpZOffset);
+            resource.transform.localPosition = new Vector3(_pickUpOffset.x, _pickUpOffset.y,
+                _pickUpOffset.z);
         
             _isResourceTaken = true;
         }

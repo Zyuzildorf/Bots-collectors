@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Source.Scripts.Other;
 using UnityEngine;
 
@@ -10,29 +9,16 @@ namespace Source.Scripts.Base
         [SerializeField] private float _searchRadius;
         [SerializeField] private int _maxColliders = 10;
 
-        private List<Resource> _freeResources = new List<Resource>();
-        private List<Resource> _busyResources = new List<Resource>();
         private Collider[] _hitColliders;
 
-        public int FreeResourcesCount => _freeResources.Count;
-        
-        public bool TryGetFreeResource(out Resource freeResource)
+        public bool TryFindResources(out List<Resource> resources)
         {
-            if (_freeResources.Count > 0)
+            resources = new List<Resource>();
+
+            if (_hitColliders == null)
             {
-                freeResource = GetLastFreeResource();
-                return true;
+                _hitColliders = new Collider[_maxColliders];
             }
-
-            freeResource = null;
-            return false;
-        }
-
-        public bool TryFindResources()
-        {
-            bool isFoundAny = false;
-
-            _hitColliders = new Collider[_maxColliders];
 
             int collidersAmount = Physics.OverlapSphereNonAlloc(transform.position, _searchRadius, _hitColliders);
 
@@ -40,24 +26,17 @@ namespace Source.Scripts.Base
             {
                 if (_hitColliders[i].TryGetComponent(out Resource resource))
                 {
-                    if (_busyResources.Contains(resource) == false && _freeResources.Contains(resource) == false)
-                    {
-                        _freeResources.Add(resource);
-                        isFoundAny = true;
-                    }
+                    resources.Add(resource);
                 }
             }
 
-            return isFoundAny;
+            if (resources.Count > 0)
+            {
+                return true;
+            }
+            
+            return false;
         }
-        private Resource GetLastFreeResource()
-        {
-            Resource resource = _freeResources.Last();
-            _freeResources.Remove(resource);
-            _busyResources.Add(resource);
-            return resource;
-        }
-        
         
         private void OnDrawGizmos()
         {

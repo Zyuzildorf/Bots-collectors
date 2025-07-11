@@ -3,9 +3,12 @@ using UnityEngine;
 
 namespace Source.Scripts.Bots
 {
+    [RequireComponent(typeof(CollisionHandler))]
     public class BotCollector : MonoBehaviour
     {
         [SerializeField] private IdleState _idleState;
+
+        private CollisionHandler _collisionHandler;
 
         public Vector3 BasePosition { get; private set; }
         public Vector3 TargetPosition { get; private set; }
@@ -14,6 +17,7 @@ namespace Source.Scripts.Bots
 
         private void Awake()
         {
+            _collisionHandler = GetComponent<CollisionHandler>();
             BasePosition = transform.position;
 
             CompleteTask();
@@ -26,6 +30,16 @@ namespace Source.Scripts.Bots
             {
                 updatable.UpdateState();
             }
+        }
+
+        private void OnEnable()
+        {
+            _collisionHandler.TriggerEntered += ProccessCollision;
+        }
+
+        private void OnDisable()
+        {
+            _collisionHandler.TriggerEntered -= ProccessCollision;
         }
 
         public void SetState(CollectorState state)
@@ -53,6 +67,14 @@ namespace Source.Scripts.Bots
         {
             IsTaskReceived = true;
             TargetPosition = target;
+        }
+
+        private void ProccessCollision(Collider other)
+        {
+            if (CurrentState is ITriggerable triggerable)
+            {
+                triggerable.ProcessTriggerCollider(other);
+            }
         }
     }
 }

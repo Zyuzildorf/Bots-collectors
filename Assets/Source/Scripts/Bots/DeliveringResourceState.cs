@@ -4,17 +4,14 @@ using UnityEngine;
 
 namespace Source.Scripts.Bots
 {
-    public class DeliveringResourceState : MovementState, IUpdatable, IEnterable
+    public class DeliveringResourceState : MovementState, IUpdatable, ITriggerable
     {
         [SerializeField] private IdleState _idleState;
     
         private Vector3 _targetPosition;
 
-        private void OnTriggerEnter(Collider other)
+        public void ProcessTriggerCollider(Collider other)
         {
-            if (BotCollector.CurrentState.Equals(this) == false)
-                return;
-
             if (other.TryGetComponent(out Base.Base botBase))
             {
                 botBase.SetResource(DropResource());
@@ -23,15 +20,17 @@ namespace Source.Scripts.Bots
                 BotCollector.SetState(_idleState);
             }
         }
-
+        
         public void UpdateState()
         {
             Move(_targetPosition);
             Rotate(_targetPosition);
         }
 
-        public void Enter()
+        public override void Enter()
         {
+            base.Enter();
+            
             _targetPosition = BotCollector.BasePosition;
         }
 
@@ -40,6 +39,7 @@ namespace Source.Scripts.Bots
             Resource resource = transform.GetComponentInChildren<Resource>();
             resource.SetKinematicBehavior(false);
             resource.transform.SetParent(null);
+            resource.CallEvent();
 
             return resource;
         }
