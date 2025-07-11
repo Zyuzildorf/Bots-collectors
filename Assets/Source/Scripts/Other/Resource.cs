@@ -17,10 +17,16 @@ namespace Source.Scripts.Other
             _collider = GetComponent<BoxCollider>();
         }
 
-        public void SetKinematicBehavior(bool isKinematic)
+        public void ActivateKinematicBehavior()
         {
-            _rigidbody.isKinematic = isKinematic;
-            _collider.isTrigger = isKinematic;
+            _rigidbody.isKinematic = true;
+            _collider.isTrigger = true;
+        }
+
+        public void DeactivateKinematicBehavior()
+        {
+            _rigidbody.isKinematic = false;
+            _collider.isTrigger = false;
         }
 
         public void CallEvent()

@@ -9,9 +9,9 @@ namespace Source.Scripts.Bots
 
         public void UpdateState()
         {
-            if (BotCollector.IsTaskReceived)
+            if (StateMachine.IsTaskReceived)
             {
-                BotCollector.SetState(_searchingResourceState);
+                StateMachine.SetState(_searchingResourceState);
             }
         }
     }

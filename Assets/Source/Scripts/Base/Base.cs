@@ -56,7 +56,7 @@ namespace Source.Scripts.Base
             {
                 foreach (BotCollector bot in _bots)
                 {
-                    if (bot.IsTaskReceived == false)
+                    if (bot.IsBotFree)
                     {
                         TryGiveTask(bot);
                     }

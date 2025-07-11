@@ -6,11 +6,11 @@ namespace Source.Scripts.Bots
     [RequireComponent(typeof(BotCollector))]
     public abstract class CollectorState : MonoBehaviour, IExitable, IEnterable
     {
-        protected BotCollector BotCollector;
+        protected StateMachine StateMachine;
 
         private void Awake()
         {
-            BotCollector = GetComponent<BotCollector>();
+            StateMachine = GetComponent<StateMachine>();
             enabled = false;
         }
 

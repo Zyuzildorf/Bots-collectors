@@ -16,8 +16,8 @@ namespace Source.Scripts.Bots
             {
                 botBase.SetResource(DropResource());
 
-                BotCollector.CompleteTask();
-                BotCollector.SetState(_idleState);
+                StateMachine.CompleteTask();
+                StateMachine.SetState(_idleState);
             }
         }
         
@@ -31,13 +31,13 @@ namespace Source.Scripts.Bots
         {
             base.Enter();
             
-            _targetPosition = BotCollector.BasePosition;
+            _targetPosition = StateMachine.BasePosition;
         }
 
         private Resource DropResource()
         {
             Resource resource = transform.GetComponentInChildren<Resource>();
-            resource.SetKinematicBehavior(false);
+            resource.DeactivateKinematicBehavior();
             resource.transform.SetParent(null);
             resource.CallEvent();
 

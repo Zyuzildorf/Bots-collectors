@@ -28,7 +28,7 @@ namespace Source.Scripts.Bots
 
             if (_isResourceTaken)
             {
-                BotCollector.SetState(_deliveringResourceState);
+                StateMachine.SetState(_deliveringResourceState);
             }
         }
     
@@ -37,14 +37,12 @@ namespace Source.Scripts.Bots
             base.Enter();
             
             _isResourceTaken = false;
-            _targetPosition = BotCollector.TargetPosition;
+            _targetPosition = StateMachine.TargetPosition;
         }
 
         private void PickUpResource(Resource resource)
         {
-            bool isKinematic = true;
-        
-            resource.SetKinematicBehavior(isKinematic);
+            resource.ActivateKinematicBehavior();
         
             resource.transform.SetParent(transform);
             resource.transform.localPosition = new Vector3(_pickUpOffset.x, _pickUpOffset.y,
