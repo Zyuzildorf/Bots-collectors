@@ -29,13 +29,8 @@ namespace Source.Scripts.Base
                     resources.Add(resource);
                 }
             }
-
-            if (resources.Count > 0)
-            {
-                return true;
-            }
             
-            return false;
+            return resources.Count > 0;
         }
         
         private void OnDrawGizmos()

@@ -62,7 +62,7 @@ namespace Source.Scripts.Bots
             TaskCompleted?.Invoke();
         }
 
-        public void GetTask(Vector3 target)
+        public void SetTask(Vector3 target)
         {
             IsTaskReceived = true;
             TargetPosition = target;

@@ -35,10 +35,10 @@ namespace Source.Scripts.Bots
             _stateMachine.TaskCompleted -= CompleteTask;
         }
 
-        public void GetTask(Vector3 target)
+        public void SetTask(Vector3 target)
         {
             IsBotFree = false;
-            _stateMachine.GetTask(target);
+            _stateMachine.SetTask(target);
         }
 
         private void CompleteTask()

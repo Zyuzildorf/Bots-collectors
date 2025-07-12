@@ -7,7 +7,8 @@ using UnityEngine;
 
 namespace Source.Scripts.Base
 {
-    [RequireComponent(typeof(BotsSpawner), typeof(ResourcesSearcher))]
+    [RequireComponent(typeof(BotsSpawner), typeof(ResourcesSearcher), 
+        typeof(ResourcesCounter))]
     public class Base : MonoBehaviour
     {
         [SerializeField] private int _startBotsAmount;
@@ -18,6 +19,7 @@ namespace Source.Scripts.Base
         private List<BotCollector> _bots;
         private BotsSpawner _spawner;
         private ResourcesSearcher _searcher;
+        private ResourcesCounter _resourcesCounter;
         private List<Resource> _resources;
         private WaitForSeconds _waitForBotsSearch;
         private WaitForSeconds _waitForResourcesSearch;
@@ -26,9 +28,10 @@ namespace Source.Scripts.Base
         {
             _spawner = GetComponent<BotsSpawner>();
             _searcher = GetComponent<ResourcesSearcher>();
+            _resourcesCounter = GetComponent<ResourcesCounter>();
+            
             _waitForBotsSearch = new WaitForSeconds(_searchingBotsDelay);
             _waitForResourcesSearch = new WaitForSeconds(_searchingResourcesDelay);
-            _resources = new List<Resource>();
         }
 
         private void Start()
@@ -36,7 +39,7 @@ namespace Source.Scripts.Base
             _bots = _spawner.SpawnBots(_startBotsAmount);
 
             StartCoroutine(CheckForFreeBots());
-            StartCoroutine(CheckForFreeResourcesAvailable());
+            StartCoroutine(FindFreeAvailableResources());
         }
 
         private void OnDisable()
@@ -47,7 +50,7 @@ namespace Source.Scripts.Base
         public void SetResource(Resource resource)
         {
             _vault.RemoveBusyResource(resource);
-            _resources.Add(resource);
+            _resourcesCounter.SetResource(resource);
         }
 
         private IEnumerator CheckForFreeBots()
@@ -66,7 +69,7 @@ namespace Source.Scripts.Base
             }
         }
 
-        private IEnumerator CheckForFreeResourcesAvailable()
+        private IEnumerator FindFreeAvailableResources()
         {
             while (enabled)
             {
@@ -86,7 +89,7 @@ namespace Source.Scripts.Base
         {
             if (_vault.TryGetFreeResource(out Resource resource))
             {
-                bot.GetTask(resource.transform.position);
+                bot.SetTask(resource.transform.position);
             }
         }
     }

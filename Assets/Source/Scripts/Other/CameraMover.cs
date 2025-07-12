@@ -2,19 +2,31 @@ using UnityEngine;
 
 namespace Source.Scripts.Other
 {
+    [RequireComponent(typeof(InputReader))]
     public class CameraMover : MonoBehaviour
     {
-        private const string HorizontalAxis = "Horizontal";
-        private const string VerticalAxis = "Vertical";
-        
         [SerializeField] private float _speed;
 
-        private void Update()
+        private InputReader _inputReader;
+
+        private void Awake()
         {
-            float horizontal = Input.GetAxis(HorizontalAxis);
-            float vertical = Input.GetAxis(VerticalAxis);
-        
-            transform.Translate(horizontal * _speed * Time.deltaTime, 0, vertical * _speed * Time.deltaTime);
+            _inputReader = GetComponent<InputReader>();
+        }
+
+        private void OnEnable()
+        {
+            _inputReader.MoveKeyPressed += Move;
+        }
+
+        private void OnDisable()
+        {
+            _inputReader.MoveKeyPressed -= Move;
+        }
+
+        private void Move(Vector2 input)
+        {
+            transform.Translate(input.x * _speed * Time.deltaTime, 0, input.y * _speed * Time.deltaTime);
         }
     }
 }

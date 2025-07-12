@@ -20,7 +20,7 @@ namespace Source.Scripts.Spawners
 
         private void OnDisable()
         {
-            foreach (Resource resource in _activeObjects.ToArray())
+            foreach (Resource resource in ActiveObjects.ToArray())
             {
                 resource.Collected -= OnCollected;
             }

@@ -11,8 +11,8 @@ namespace Source.Scripts.Spawners
         [SerializeField] private int _initialPoolSize = 10;
         [SerializeField] private bool _canExpand = true;
 
-        protected Queue<T> _pool = new Queue<T>();
-        protected List<T> _activeObjects = new List<T>();
+        private Queue<T> _pool = new Queue<T>();
+        protected List<T> ActiveObjects = new List<T>();
 
         protected virtual void Awake()
         {
@@ -44,7 +44,7 @@ namespace Source.Scripts.Spawners
         protected virtual void ActionOnGet(T obj)
         {
             obj.gameObject.SetActive(false);
-            _activeObjects.Remove(obj);
+            ActiveObjects.Remove(obj);
             _pool.Enqueue(obj);
         }
         
@@ -52,7 +52,7 @@ namespace Source.Scripts.Spawners
         {
             obj.transform.position = GetRandomSpawnPosition();
             obj.gameObject.SetActive(true);
-            _activeObjects.Add(obj);
+            ActiveObjects.Add(obj);
             
             return obj;
         }

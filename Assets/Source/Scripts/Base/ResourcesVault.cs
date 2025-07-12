@@ -14,7 +14,7 @@ public class ResourcesVault : MonoBehaviour
     {
         if (_freeResources.Count > 0)
         {
-            freeResource = GetLastFreeResource();
+            freeResource = GiveLastFreeResource();
             return true;
         }
 
@@ -38,7 +38,7 @@ public class ResourcesVault : MonoBehaviour
         }
     }
 
-    private Resource GetLastFreeResource()
+    private Resource GiveLastFreeResource()
     {
         Resource resource = _freeResources.Last();
         _freeResources.Remove(resource);
