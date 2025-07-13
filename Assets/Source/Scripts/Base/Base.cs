@@ -38,7 +38,7 @@ namespace Source.Scripts.Base
         {
             _bots = _spawner.SpawnBots(_startBotsAmount);
 
-            StartCoroutine(CheckForFreeBots());
+            StartCoroutine(GiveTaskForFreeBots());
             StartCoroutine(FindFreeAvailableResources());
         }
 
@@ -53,7 +53,7 @@ namespace Source.Scripts.Base
             _resourcesCounter.SetResource(resource);
         }
 
-        private IEnumerator CheckForFreeBots()
+        private IEnumerator GiveTaskForFreeBots()
         {
             while (enabled)
             {
